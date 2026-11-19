@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nail Studio – luiyi games</title>
+<style>
+:root{--b1:#a9e9ff;--b2:#e6f8ff;--pu:#a050e6;--pu2:#6d2fb5;--tx:#4a1d86;--card:rgba(255,255,255,.75);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--b1:#1c2a5a;--b2:#2d2057;--tx:#ecdcff;--card:rgba(50,36,92,.8)}}
+:root[data-theme="dark"]{--b1:#1c2a5a;--b2:#2d2057;--tx:#ecdcff;--card:rgba(50,36,92,.8)}
+html,body{height:100%;margin:0}
+body{position:relative;overflow:hidden;font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;color:var(--tx);background:linear-gradient(var(--b1),var(--b2));touch-action:manipulation;-webkit-user-select:none;user-select:none}
+[hidden]{display:none!important}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center}
+button{font:inherit;cursor:pointer}
+/* splash */
+#splash{justify-content:center;background:radial-gradient(circle at 50% 35%,#c06bff,#5b21b6 60%,#2a0f5e);color:#fff;text-align:center}
+#splash .hand{font-size:88px;animation:fl 2.4s ease-in-out infinite}
+#splash h1{margin:6px 0 0;font-size:clamp(46px,16vw,84px);font-weight:900;letter-spacing:-2px;line-height:1;background:linear-gradient(90deg,#ffd1f0,#fff,#9fe8ff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 #3b0f82)}
+#splash p{margin:14px 0 0;font-size:18px;opacity:.85}
+#splash i{position:absolute;font-style:normal;font-size:26px;animation:tw 2s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-14px) rotate(6deg)}}
+@keyframes tw{50%{transform:scale(.4);opacity:.3}}
+@keyframes sl{from{transform:translateX(60px);opacity:0}}
+/* juego */
+#game,#end{--tx:#4a1d86;--card:rgba(255,255,255,.75);color:#4a1d86;background:linear-gradient(#b3ecfc 0%,#a9ebff 55%,#cdf2ff 80%,#e2e0ff 100%)}
+.top{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;box-sizing:border-box}
+.rb{width:48px;height:48px;border-radius:50%;border:3px solid #fff;color:#fff;font-size:22px;background:linear-gradient(#b56cf0,#6d2fb5);box-shadow:0 3px 8px rgba(60,20,120,.35)}
+#fname{font-weight:900;font-size:20px}
+#stage{flex:1;min-height:0;width:100%;position:relative;display:flex;align-items:center;justify-content:center}
+#cv{touch-action:none}#hint{position:absolute;top:2px;left:0;right:0;text-align:center;font-weight:800;font-size:14px;transition:opacity .4s;pointer-events:none;z-index:1}
+#cv.in{animation:sl .35s ease-out}
+#next{position:absolute;right:12px;bottom:14px;padding:10px 26px;border-radius:30px;border:3px solid #fff;color:#fff;font-size:24px;font-weight:900;background:linear-gradient(#b56cf0,#6d2fb5);box-shadow:0 4px 10px rgba(60,20,120,.4)}
+#tabs{display:flex;gap:6px;width:100%;padding:0 10px;box-sizing:border-box}
+#tabs button{flex:1;border:0;padding:9px 2px;border-radius:14px 14px 0 0;background:var(--card);color:var(--tx);font-weight:800;font-size:13px}
+#tabs button.on{background:linear-gradient(#d9a8ff,#a050e6);color:#fff}
+#bar{width:100%;box-sizing:border-box;display:flex;gap:10px;align-items:center;overflow-x:auto;padding:10px 12px 14px;background:var(--card);height:112px}
+.b{flex:0 0 auto;width:68px;height:84px;border-radius:16px;border:3px solid transparent;background:linear-gradient(#7fd7ff,#c4f2ff);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 0 7px;position:relative}
+.b.on{border-color:#fff;box-shadow:0 0 0 2px var(--pu)}
+.cap{width:20px;height:22px;background:#111;border-radius:4px 4px 0 0;display:block}
+.bd{width:36px;height:32px;border-radius:12px 12px 16px 16px;display:block;border:1.5px solid rgba(0,0,0,.25)}
+.e{font-size:38px;justify-content:center;padding:0}
+.pt{font-size:12px;font-weight:800;color:#4a1d86;gap:4px;justify-content:center}
+.pt .bd{width:30px;height:24px}
+.sz{flex:0 0 auto;display:flex;flex-direction:column;font-size:12px;font-weight:800;gap:4px}
+.sz input{width:90px}
+/* final */
+#end{justify-content:center;gap:18px;text-align:center}
+#end h2{margin:0;font-size:30px;font-weight:900}
+#rc{width:min(80vw,340px);height:auto;aspect-ratio:360/400}
+#again{padding:14px 34px;border-radius:30px;border:3px solid #fff;color:#fff;font-size:20px;font-weight:900;background:linear-gradient(#b56cf0,#6d2fb5)}
+@media (prefers-reduced-motion:reduce){#splash .hand,#splash i{animation:none}}
+</style>
+</head>
+<body>
+<div id="splash" class="scr">
+  <i style="top:14%;left:12%">✨</i><i style="top:22%;right:14%;animation-delay:.6s">💖</i><i style="bottom:18%;left:18%;animation-delay:1s">⭐</i><i style="bottom:24%;right:12%;animation-delay:.3s">✨</i>
+  <div class="hand">💅</div>
+  <h1>luiyi games</h1>
+  <p>Nail Studio · toca para jugar</p>
+</div>
+
+<div id="game" class="scr" hidden>
+  <div class="top"><button class="rb" id="home" aria-label="Inicio">🏠</button><div id="fname"></div><div style="display:flex;gap:8px"><button class="rb" id="snd" aria-label="Sonido">🔊</button><button class="rb" id="undo" aria-label="Deshacer">↩</button></div></div>
+  <div id="stage"><small id="hint">Elige un color y pinta la uña con tu dedo 👆</small><canvas id="cv" width="720" height="1040"></canvas><button id="next" aria-label="Siguiente dedo">➜</button></div>
+  <div id="tabs"><button data-t="0" class="on">Colores</button><button data-t="1">Degradados</button><button data-t="2">Figuras</button><button data-t="3">Diseños</button></div>
+  <div id="bar"></div>
+</div>
+
+<div id="end" class="scr" hidden>
+  <h2>¡Uñas listas! 💖</h2>
+  <canvas id="rc" width="720" height="800"></canvas>
+  <button id="again">Jugar de nuevo</button>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),W=360,H=520,cv=$('#cv'),g=cv.getContext('2d');
+const COL=['#e53935','#1e88e5','#ffee58','#8e24aa','#43a047','#ff7043','#00bcd4','#f06292','#212121','#9ccc65','#5e35b1','#ffb300','#26a69a','#ad1457','#ffffff','#3f51b5','#ff4081','#8d6e63','#29b6f6','#ffe0b2','#ab47bc','#ff5252'];
+const GR=[['#ff9800','#e91e63'],['#00e5ff','#d500f9'],['#7b1fa2','#111'],['#ffeb3b','#ff5722'],['#651fff','#29b6f6'],['#ffffff','#ff80ab'],['#ff1744','#111'],['#69f0ae','#00b0ff'],['#f48fb1','#ce93d8'],['#ffd54f','#ff6f00']];
+const FIG=['❤️','⭐','🌸','🦋','🌙','✨','🎀','💎','🍓','🌈','🐱','🐷','🐶','🐦','🐰','🐴','🦄','⚡','🍒','☁️','🔥','🍀'];
+const PAT=[['st','Rayas'],['dt','Puntos'],['gl','Brillos'],['hr','Corazones'],['zz','Zigzag'],['cu','Cuadros']];
+const FN=['Pulgar','Índice','Medio','Anular','Meñique'];
+let tab=0,sel=null,col='#e91e63',br={k:'c',c:col},size=44,bw=34,fi=0,nails,cur=null,lp=[0,0],lt=0,now=()=>performance.now();
+
+/* sonidos (sintetizados, sin archivos) */
+let ac,mute=false,nb;
+function au(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(ac&&ac.state=='suspended')ac.resume();return mute?null:ac}
+function tone(f,d=.12,ty='sine',v=.15,t0=0){const a=au();if(!a)return;const o=a.createOscillator(),gn=a.createGain(),t=a.currentTime+t0;o.type=ty;o.frequency.setValueAtTime(f,t);gn.gain.setValueAtTime(v,t);gn.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(gn).connect(a.destination);o.start(t);o.stop(t+d)}
+function swish(){const a=au();if(!a)return;if(!nb){nb=a.createBuffer(1,a.sampleRate*.08,a.sampleRate);const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length)}const s=a.createBufferSource(),f=a.createBiquadFilter(),gn=a.createGain();s.buffer=nb;f.type='bandpass';f.frequency.value=1800+Math.random()*900;gn.gain.value=.14;s.connect(f).connect(gn).connect(a.destination);s.start()}
+const sfx={pick:i=>tone(520+i*18,.1,'triangle'),stamp:()=>{tone(988,.15,'sine',.12);tone(1319,.2,'sine',.1,.07)},next:()=>[523,659,784].forEach((f,i)=>tone(f,.18,'triangle',.13,i*.08)),undo:()=>tone(220,.12,'square',.07),end:()=>[523,659,784,1047,1319].forEach((f,i)=>tone(f,.3,'triangle',.14,i*.12))};
+
+/* pinceles: color, degradado o diseño */
+const TL={};
+function tile(p,c0){const key=p+c0;if(TL[key])return TL[key];const t=document.createElement('canvas');t.width=t.height=40;const c=t.getContext('2d');c.fillStyle=c.strokeStyle=c0;
+  if(p=='st'){c.lineWidth=10;c.beginPath();[[0,40,40,0],[-20,20,20,-20],[20,60,60,20]].forEach(l=>{c.moveTo(l[0],l[1]);c.lineTo(l[2],l[3])});c.stroke()}
+  if(p=='dt'){c.beginPath();c.arc(20,20,7,0,7);c.fill()}
+  if(p=='gl')for(let i=0;i<16;i++){c.globalAlpha=.4+Math.random()*.6;c.beginPath();c.arc(Math.random()*40,Math.random()*40,1+Math.random()*2.2,0,7);c.fill()}
+  if(p=='hr'){c.font='28px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('♥',20,22)}
+  if(p=='zz'){c.lineWidth=6;c.lineJoin='round';c.beginPath();c.moveTo(0,28);c.lineTo(10,12);c.lineTo(20,28);c.lineTo(30,12);c.lineTo(40,28);c.stroke()}
+  if(p=='cu'){c.fillRect(0,0,20,20);c.fillRect(20,20,20,20)}
+  return TL[key]=t}
+function stl(c,s){if(s.k=='c')return s.c;if(s.k=='g'){const q=c.createLinearGradient(0,36,0,350);q.addColorStop(0,s.a);q.addColorStop(1,s.b);return q}return c.createPattern(tile(s.p,s.c),'repeat')}
+function seg(n,k,i){const c=n.pc;c.setTransform(2,0,0,2,0,0);c.lineCap=c.lineJoin='round';c.lineWidth=k.w;c.strokeStyle=stl(c,k.s);const a=k.p[i],b=k.p[i+1]||[a[0]+.01,a[1]];c.beginPath();c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1]);c.stroke()}
+function rebuild(n){n.pc.setTransform(1,0,0,1,0,0);n.pc.clearRect(0,0,720,1040);n.K.forEach(k=>{for(let i=0;i<k.p.length-1||i==0;i++)seg(n,k,i)})}
+
+/* dibujo: dedo y uña de mujer con punta francesa */
+function np(c){c.beginPath();c.moveTo(146,36);c.lineTo(212,36);c.quadraticCurveTo(223,36,224,50);c.lineTo(227,240);c.bezierCurveTo(228,320,205,350,170,350);c.bezierCurveTo(130,350,110,310,111,250);c.lineTo(134,52);c.quadraticCurveTo(135,36,146,36);c.closePath()}
+function skin(c){const q=c.createLinearGradient(90,0,256,0);q.addColorStop(0,'#eeaa77');q.addColorStop(.4,'#fdd5aa');q.addColorStop(1,'#e69b66');c.fillStyle=q;c.beginPath();c.moveTo(90,H);c.lineTo(91,330);c.quadraticCurveTo(95,225,112,195);c.quadraticCurveTo(170,120,229,185);c.quadraticCurveTo(250,235,256,330);c.lineTo(256,H);c.fill()}
+function drawNail(c,n,t){
+  c.save();np(c);const q=c.createLinearGradient(0,98,0,350);q.addColorStop(0,'#f3aaa3');q.addColorStop(1,'#e8908a');c.fillStyle=q;c.fill();c.clip();
+  c.fillStyle='#fbeceb';c.beginPath();c.moveTo(0,30);c.lineTo(W,30);c.lineTo(W,134);c.quadraticCurveTo(170,62,0,134);c.fill();
+  c.drawImage(n.P,0,0,W,H);
+  n.S.forEach(s=>{const p=Math.min(1,(t-s.t0)/300),k=p<.7?p/.7*1.25:1.25-(p-.7)/.3*.25;
+    c.font=`${s.s*k}px "Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillText(s.e,s.x,s.y)});
+  c.fillStyle='rgba(255,255,255,.3)';c.fillRect(146,44,16,290);
+  c.restore();np(c);c.shadowColor='rgba(205,110,100,.5)';c.shadowBlur=7;c.strokeStyle='rgba(255,238,234,.9)';c.lineWidth=2;c.stroke();c.shadowBlur=0;
+}
+function frame(){g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,W,H);skin(g);if(nails)drawNail(g,nails[fi],now());requestAnimationFrame(frame)}
+function fit(){const a=$('#stage'),k=Math.min(a.clientWidth/W,a.clientHeight/H);cv.style.width=W*k+'px';cv.style.height=H*k+'px'}
+addEventListener('resize',fit);
+
+/* estado */
+function reset(){nails=FN.map(()=>{const P=document.createElement('canvas');P.width=720;P.height=1040;return{K:[],S:[],H:[],P,pc:P.getContext('2d')}});fi=0;sel=null;head();$('#hint').style.opacity=1}
+function head(){$('#fname').textContent=FN[fi]+'  '+(fi+1)+'/5';$('#next').textContent=fi<4?'➜':'✓'}
+function bar(){
+  let h=`<label class="sz">${tab==2?'Tamaño':'Pincel'}<input id="sz" type="range" min="14" max="${tab==2?90:70}" value="${tab==2?size:bw}"></label>`;
+  if(tab==0)COL.forEach(c=>h+=`<button class="b${br.k=='c'&&c==br.c?' on':''}" data-a="c" data-v="${c}"><i class="cap"></i><i class="bd" style="background:${c}"></i></button>`);
+  if(tab==1)GR.forEach((p,i)=>h+=`<button class="b" data-a="g" data-v="${i}"><i class="cap"></i><i class="bd" style="background:linear-gradient(${p[0]},${p[1]})"></i></button>`);
+  if(tab==2)FIG.forEach(f=>h+=`<button class="b e${f==sel?' on':''}" data-a="f" data-v="${f}">${f}</button>`);
+  if(tab==3)PAT.forEach(p=>h+=`<button class="b pt" data-a="p" data-v="${p[0]}"><i class="bd" style="background:${col}"></i>${p[1]}</button>`);
+  $('#bar').innerHTML=h;
+}
+$('#bar').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;const a=b.dataset.a,v=b.dataset.v;sfx.pick([...b.parentNode.children].indexOf(b));
+  b.parentNode.querySelectorAll('.on').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  if(a=='c'){col=v;br={k:'c',c:v};sel=null}
+  else if(a=='g'){br={k:'g',a:GR[v][0],b:GR[v][1]};sel=null}
+  else if(a=='p'){br={k:'p',p:v,c:col};sel=null}
+  else sel=v;
+};
+$('#bar').oninput=e=>{if(e.target.id=='sz'){if(tab==2)size=+e.target.value;else bw=+e.target.value}};
+$('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=+b.dataset.t;[...$('#tabs').children].forEach((x,i)=>x.classList.toggle('on',i==tab));bar()};
+
+/* pintar con el dedo */
+function pos(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]}
+cv.onpointerdown=e=>{
+  au();const[x,y]=pos(e),n=nails[fi];$('#hint').style.opacity=0;
+  if(tab==2&&sel){g.setTransform(2,0,0,2,0,0);np(g);if(g.isPointInPath(x*2,y*2)){n.S.push({e:sel,x,y,s:size,t0:now()});n.H.push('S');sfx.stamp()}return}
+  cv.setPointerCapture(e.pointerId);cur={s:{...br},w:bw,p:[[x,y]]};n.K.push(cur);n.H.push('K');seg(n,cur,0);lp=[x,y];swish();
+};
+cv.onpointermove=e=>{
+  if(!cur)return;const[x,y]=pos(e);cur.p.push([x,y]);seg(nails[fi],cur,cur.p.length-2);
+  if(Math.hypot(x-lp[0],y-lp[1])>18&&now()-lt>60){lp=[x,y];lt=now();swish()}
+};
+cv.onpointerup=cv.onpointercancel=()=>{cur=null};
+$('#undo').onclick=()=>{const n=nails[fi],h=n.H.pop();if(!h)return;sfx.undo();if(h=='K'){n.K.pop();rebuild(n)}else n.S.pop()};
+$('#snd').onclick=()=>{mute=!mute;$('#snd').textContent=mute?'🔇':'🔊';au()};
+$('#next').onclick=()=>{cur=null;if(fi<4){fi++;sel=null;head();bar();sfx.next();cv.classList.remove('in');void cv.offsetWidth;cv.classList.add('in')}else showEnd()};
+$('#again').onclick=()=>{reset();bar();show('game')};
+$('#home').onclick=()=>{reset();bar();toSplash()};
+
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.hidden=s.id!=id);if(id=='game')fit()}
+function toSplash(){show('splash');setTimeout(()=>{if(!$('#splash').hidden)show('game')},3000)}
+$('#splash').onclick=()=>{au();show('game')};
+
+/* mano final de mujer con las 5 uñas */
+const F=[[262,300,314,214,44],[228,246,246,104,40],[190,240,186,78,42],[150,244,126,96,40],[112,254,76,134,36]];
+function showEnd(){
+  show('end');sfx.end();const c=$('#rc').getContext('2d');c.setTransform(2,0,0,2,0,0);c.clearRect(0,0,360,400);
+  const q=c.createLinearGradient(60,0,320,0);q.addColorStop(0,'#efb283');q.addColorStop(.5,'#fddbb8');q.addColorStop(1,'#eaa273');
+  c.fillStyle=c.strokeStyle=q;c.lineCap='round';c.beginPath();c.ellipse(185,320,96,92,0,0,7);c.fill();
+  F.forEach(f=>{c.lineWidth=f[4];c.beginPath();c.moveTo(f[0],f[1]);c.lineTo(f[2],f[3]);c.stroke()});
+  F.forEach((f,i)=>{const a=Math.atan2(f[2]-f[0],-(f[3]-f[1]));c.save();c.translate(f[2],f[3]);c.rotate(a);c.translate(0,-f[4]/2+8);c.scale(.3,.3);c.translate(-169,-36);drawNail(c,nails[i],1e12);c.restore()});
+}
+reset();bar();frame();toSplash();
+</script>
+</body>
+</html>
